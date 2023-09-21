@@ -17,8 +17,8 @@ class No {
     public: 
         //Construtor sem parâmetro
         No();
-        //Construtor com parametros ID, PESO, PROXNO, PRIMEIRAARESTA
-        No(int idNo, int peso, No* proxNo, Aresta* primeiraAresta); 
+        //Construtor com parametros ID, PESO
+        No(int idNo, int peso); 
         //Destrutor
         ~No(); 
 
@@ -41,6 +41,7 @@ class No {
         void diminuiGrauSaida(); 
         void aumentaGrauEntrada();
         void diminuiGrauEntrada(); 
+        
 }; 
 
 #endif NO_H

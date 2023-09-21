@@ -8,6 +8,7 @@ using namespace std;
 class Aresta {
     private: 
         int peso; 
+        int idNoOrigem;
         int idNoDestino; 
         Aresta* proxAresta; 
 
@@ -16,18 +17,20 @@ class Aresta {
         Aresta(); 
 
         //Construtor com parâmetros
-        Aresta(int peso, int idNoDestino, Aresta *getProxAresta); 
+        Aresta(int peso, int idNoDestino); 
 
         //Destrutor
         ~Aresta(); 
 
         //Métodos de set
         void setPeso(int peso); 
+        void setIdNoOrigem(int idNoOrigem);
         void setIdNoDestino(int idNoDestino); 
         void setProxAresta (Aresta *setProxAresta); 
 
         //Métodos de get
         int getPeso();
+        int getIdNoOrigem();
         int getIdNoDestino(); 
         Aresta *getProxAresta(); 
 

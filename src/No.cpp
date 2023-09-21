@@ -1,8 +1,9 @@
-#include "includes/No.h"
+#include "include/No.h"
 #include <iostream>
 
 using namespace std;
 
+//Construtor sem parâmetros
 No::No(){
     this->idNo = 0;
     this->peso = 0;
@@ -12,17 +13,25 @@ No::No(){
     this->primeiraAresta = NULL; //Ponteiro para lista de arestas
 }
 
-No::No(int idNo, int peso, No* proxNo, Aresta* primeiraAresta){
-    this->idNo = idNo;
-    this->peso = peso; 
+//Construtor com parâmetros
+No::No(int idNo, int peso){
+    this->setIdNo(idNo);
+    this->setPeso(peso);
     this->grauEntrada = 0; 
     this->grauSaida = 0;
-    this->proxNo = proxNo; // NULL
-    this->primeiraAresta = primeiraAresta; // NULL 
+    this->proxNo = NULL; // NULL
+    this->primeiraAresta= NULL; // NULL 
 }
 
+//Destrutor
 No::~No(){
-    //Destrutor
+    Aresta* aux = this->getPrimeiraAresta();
+    while (aux != NULL){
+        Aresta* auxProx = aux->getProxAresta();
+        delete aux;
+        aux = auxProx;
+    }
+    
 }
 
 //Metodos de set
@@ -37,7 +46,8 @@ void No::setPeso(int peso){
 void No::setProxNo(No *p){
     if (this->proxNo == NULL){
         this->proxNo = p;
-    } else {
+    } 
+    else {
         No *aux = this->proxNo; 
         this->proxNo = p;
         p->setProxNo(aux);
@@ -47,7 +57,8 @@ void No::setProxNo(No *p){
 void No::setPrimeiraAresta(Aresta *a){
     if (this->primeiraAresta == NULL){
         this->primeiraAresta = a; 
-    } else {
+    } 
+    else {
         exit(1);
         /*
         Aresta *aux = this->primeiraAresta;
@@ -81,3 +92,4 @@ No* No::getProxNo(){
 Aresta* No::getPrimeiraAresta(){
     return this->primeiraAresta; 
 }
+
