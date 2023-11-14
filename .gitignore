@@ -138,3 +138,4 @@ nbdist/
 *.opendb
 *.json
 *.sqlite
+*.wsuo
