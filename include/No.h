@@ -1,47 +1,47 @@
-#ifndef NO_H_INCLUDED
-#define NO_H_INCLUDED
-
+#ifndef NO_H
+#define NO_H
+#include <iostream>
 #include "Aresta.h"
-
-#include <vector>
 
 using namespace std;
 
-class No
-{
-public:
+class No {
+    private: 
+        int idNo; 
+        int peso; 
+        int grauEntrada;
+        int grauSaida; 
+        No* proxNo; //Proximo nó na memoria
+        Aresta* primeiraAresta; //Ponteiro para lista de arestas
 
-public:
-    No(int id);
-    ~No();
-    int id;
-    int getPeso();
-    void setPeso(int val);
-    int getPesoAresta();
-    void setPesoAresta(int val);
-    int getGrau();
-    void setGrau(int val);
-    int getVisitado();
-    void setVisitado(bool val);
-    No* getProx();
-    void setProx(No* val);
-    vector<No*> getAdjacentes();
-    Aresta* adicionaNoAdjacente(No* no, bool val, int peso);
-    void adicionaNoAdjacenteSemMsg(No* no, bool direcionado, int peso);
-    bool verificaAdjacencia(No* no);
-    vector<No*> nosAdjacentes;
-    void printAdjacentes();
-    void removeAdjacente(No* adjacente);
-    void removeAdjacenteSemMsg(No* adjacente);
+    public: 
+        //Construtor sem parâmetro
+        No();
+        //Construtor com parametros ID, PESO
+        No(int idNo, int peso); 
+        //Destrutor
+        ~No(); 
 
-    int peso;
-    int pesoAresta;
-    int grau;
-    vector<Aresta*> arestas;
-    bool visitado;
-    bool direcionado;
-    int distancia;
+        //Metodos de set
+        void setIdNo(int idNo);
+        void setPeso(int peso); 
+        void setProxNo(No *p); 
+        void setPrimeiraAresta (Aresta *a); 
 
-};
+        //Metodos de get
+        int getIdNo();
+        int getPeso(); 
+        int getGrauEntrada();
+        int getGrauSaida();
+        No* getProxNo(); 
+        Aresta* getPrimeiraAresta(); 
 
-#endif // NO_H_INCLUDED
+        //Outros metodos
+        void aumentaGrauSaida(); 
+        void diminuiGrauSaida(); 
+        void aumentaGrauEntrada();
+        void diminuiGrauEntrada(); 
+        
+}; 
+
+#endif NO_H
