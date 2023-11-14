@@ -1,95 +1,186 @@
-#include "include/No.h"
+#include "No.h"
+#include "Aresta.h"
+#include <stdio.h>
+#include <string>
+#include <math.h>
+#include <vector>
+#include <algorithm>
 #include <iostream>
+#include <limits>
 
 using namespace std;
 
-//Construtor sem parâmetros
-No::No(){
-    this->idNo = 0;
-    this->peso = 0;
-    this->grauEntrada = 0;
-    this->grauSaida = 0; 
-    this->proxNo = NULL; //Proximo nó na memoria
-    this->primeiraAresta = NULL; //Ponteiro para lista de arestas
+No::No(int i)
+{
+    id = i;
+    grau = 0;
+    visitado = false;
+    distancia = numeric_limits<int>::max();
 }
 
-//Construtor com parâmetros
-No::No(int idNo, int peso){
-    this->setIdNo(idNo);
-    this->setPeso(peso);
-    this->grauEntrada = 0; 
-    this->grauSaida = 0;
-    this->proxNo = NULL; // NULL
-    this->primeiraAresta= NULL; // NULL 
+No::~No()
+{
+
 }
 
-//Destrutor
-No::~No(){
-    Aresta* aux = this->getPrimeiraAresta();
-    while (aux != NULL){
-        Aresta* auxProx = aux->getProxAresta();
-        delete aux;
-        aux = auxProx;
+int No::getGrau()
+{
+    return grau;
+}
+
+void No::setGrau(int val)
+{
+    grau = val;
+}
+
+int No::getPeso()
+{
+    return peso;
+}
+
+void No::setPeso(int val)
+{
+    peso = val;
+}
+int No::getVisitado()
+{
+    return visitado;
+}
+
+void No::setVisitado(bool val)
+{
+    this->visitado = val;
+}
+
+vector<No*> No::getAdjacentes()
+{
+    return this->nosAdjacentes;
+}
+
+bool No::verificaAdjacencia(No* no)
+{
+    vector<No*> adjacentes = this->getAdjacentes();
+    int contador = count(adjacentes.begin(), adjacentes.end(), no);
+    return (contador == 1);
+}
+
+
+Aresta* No::adicionaNoAdjacente(No* no, bool direcionado, int peso)
+{
+    Aresta* aresta = new Aresta();
+    aresta->no1 = this;
+    aresta->no2 = no;
+    aresta->peso = peso;
+    this->arestas.push_back(aresta);
+    no->arestas.push_back(aresta);
+
+    if (!this->verificaAdjacencia(no))
+    {
+        if (direcionado)
+        {
+            nosAdjacentes.push_back(no);
+            no->setGrau(no->getGrau() + 1);
+        }
+        else
+        {
+            if (peso != 0)
+            {
+
+                //                no->setPesoAresta(peso);
+                nosAdjacentes.push_back(no);
+                no->nosAdjacentes.push_back(this);
+
+            }
+            else
+            {
+                nosAdjacentes.push_back(no);
+                no->nosAdjacentes.push_back(this);
+            }
+        }
+        //cout << "No " << no->id << " adicionado as adjacencias do no " << this->id << "!" << endl;
+        this->setGrau(this->getGrau() + 1);
+        no->setGrau(no->getGrau() + 1);
+        return aresta;
     }
-    
+    else
+    {
+        //cout << "Este no ja eh adjacente!" << endl;
+        return aresta;
+    }
+
 }
 
-//Metodos de set
-void No::setIdNo(int idNo){
-    this->idNo = idNo;
+void No::adicionaNoAdjacenteSemMsg(No* no, bool direcionado, int peso)
+{
+    if (!this->verificaAdjacencia(no))
+    {
+        if (direcionado)
+        {
+            nosAdjacentes.push_back(no);
+            no->setGrau(no->getGrau() + 1);
+        }
+        else
+        {
+            if (peso != 0)
+            {
+                //no->setPesoAresta(peso);
+                nosAdjacentes.push_back(no);
+                no->nosAdjacentes.push_back(this);
+
+            }
+            else
+            {
+                nosAdjacentes.push_back(no);
+                no->nosAdjacentes.push_back(this);
+            }
+        }
+    }
+    else
+    {
+        return;
+    }
+
 }
 
-void No::setPeso(int peso){
-    this->peso = peso; 
+void No::printAdjacentes()
+{
+    cout << "Nos adjacentes ao no " << this->id << ": ";
+    for (auto adjacente : nosAdjacentes)
+    {
+        cout << adjacente->id << " ";
+    }
+    cout << endl;
 }
 
-void No::setProxNo(No *p){
-    if (this->proxNo == NULL){
-        this->proxNo = p;
-    } 
-    else {
-        No *aux = this->proxNo; 
-        this->proxNo = p;
-        p->setProxNo(aux);
+void No::removeAdjacente(No* adjacente)
+{
+    if (!verificaAdjacencia(adjacente))
+    {
+        cout << "Este no nao eh adjacente!" << endl;
+        return;
+    }
+    for (unsigned int i = 0; i < nosAdjacentes.size(); i++)
+    {
+        if (nosAdjacentes[i] == adjacente)
+            nosAdjacentes.erase(nosAdjacentes.begin() + i);
+        cout << "O no " << adjacente->id << " nao eh mais adjacente ao no " << this->id << "!" << endl;
+        this->setGrau(this->getGrau() - 1);
+        return;
     }
 }
 
-void No::setPrimeiraAresta(Aresta *a){
-    if (this->primeiraAresta == NULL){
-        this->primeiraAresta = a; 
-    } 
-    else {
-        exit(1);
-        /*
-        Aresta *aux = this->primeiraAresta;
-        this->primeiraAresta = a;
-        a->setProxAresta(aux); 
-        */
+void No::removeAdjacenteSemMsg(No* adjacente)
+{
+    if (!verificaAdjacencia(adjacente))
+    {
+
+        return;
+    }
+    for (unsigned int i = 0; i < nosAdjacentes.size(); i++)
+    {
+        if (nosAdjacentes[i] == adjacente)
+            nosAdjacentes.erase(nosAdjacentes.begin() + i);
+
+        return;
     }
 }
-
-//Metodos de get
-int No::getIdNo(){
-    return this->idNo;
-}
-
-int No::getPeso(){
-    return this->peso; 
-}
-
-int No::getGrauEntrada(){
-    return this->grauEntrada; 
-}
-
-int No::getGrauSaida(){
-    return this->grauSaida; 
-}
-
-No* No::getProxNo(){
-    return this->proxNo; 
-}
-
-Aresta* No::getPrimeiraAresta(){
-    return this->primeiraAresta; 
-}
-
