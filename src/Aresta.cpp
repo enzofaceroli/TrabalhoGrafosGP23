@@ -1,63 +1,43 @@
-#include "include/Aresta.h"
-#include <iostream> 
+#include "No.h"
+#include "Aresta.h"
+#include <vector>
 
-using namespace std; 
+using namespace std;
 
-//Construtor sem parâmetros
-Aresta::Aresta(){
-    this->peso = 0; 
-    this->idNoOrigem = 0;
-    this->idNoDestino = 0;
-    this->proxAresta = NULL; 
+Aresta::Aresta()
+{
+
 }
 
-//Construtor com parâmetros;
-Aresta::Aresta(int peso, int idNoDestino){
-    this->setPeso(peso);
-    this->setIdNoDestino(idNoDestino); 
-    this->proxAresta = NULL; 
+Aresta::Aresta(No* no1, No* no2)
+{
+    no1->arestas.push_back(this);
+    no2->arestas.push_back(this);
+
+    no1->nosAdjacentes.push_back(no2);
+    no2->nosAdjacentes.push_back(no1);
+
+    no1->grau++;
+    no2->grau++;
+
+    this->no2 = no2;
+    this->no1 = no1;
+
 }
 
-//Destrutor
-Aresta::~Aresta(){
-    
-}
+Aresta::Aresta(No* no1, No* no2, int peso)
+{
+    no1->arestas.push_back(this);
+    no2->arestas.push_back(this);
 
-void Aresta::setPeso(int peso){
-    this->peso = peso; 
-}
+    no1->nosAdjacentes.push_back(no2);
+    no2->nosAdjacentes.push_back(no1);
 
-void Aresta::setIdNoDestino(int idNoDestino){
-    this->idNoDestino = idNoDestino;
-}
+    no1->grau++;
+    no2->grau++;
 
-void Aresta::setIdNoOrigem(int idNoOrigem){
-    this->idNoOrigem = idNoOrigem;
-}
+    this->no2 = no2;
+    this->no1 = no1;
+    this->peso = peso;
 
-void Aresta::setProxAresta(Aresta *a){
-    if(this->proxAresta == NULL){
-        this->proxAresta = a;
-    } 
-    else {
-        Aresta *aux = proxAresta;
-        this->proxAresta = a;
-        a->setProxAresta(aux);
-    }
-}
-
-int Aresta::getPeso() {
-    return this->peso; 
-}
-
-int Aresta::getIdNoOrigem(){
-    return this->idNoOrigem;
-}
-
-int Aresta::getIdNoDestino(){
-    return this->idNoDestino; 
-}
-
-Aresta* Aresta::getProxAresta(){
-    return this->proxAresta; 
 }
