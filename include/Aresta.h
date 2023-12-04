@@ -1,43 +1,40 @@
-#ifndef ARESTA_H
-#define ARESTA_H
+#ifndef ARESTA_H_INCLUDED
+#define ARESTA_H_INCLUDED
+
 #include "No.h"
-#include <iostream> 
 
-using namespace std;
+class No;
 
-class Aresta {
-    private: 
-        int peso; 
-        int idNoOrigem;
-        int idNoDestino; 
-        Aresta* proxAresta; 
+class Aresta
+{
+public:
 
-    public:
-        //Construtor sem parâmetros
-        Aresta(); 
 
-        //Construtor com parâmetros
-        Aresta(int peso, int idNoDestino); 
+    // Implementação antiga
+    /*
+    void setProx(Aresta aresta);
+    Aresta getProx();
+    void setNoAdj(int val);
+    int getNoAdj();
+    //int getPeso();
+    //void setPeso(int val);
+    Aresta *prox;
+    int noAdj;
+    */
 
-        //Destrutor
-        ~Aresta(); 
+    // Nova implementação
 
-        //Métodos de set
-        void setPeso(int peso); 
-        void setIdNoOrigem(int idNoOrigem);
-        void setIdNoDestino(int idNoDestino); 
-        void setProxAresta (Aresta *setProxAresta); 
+    Aresta();
+    ~Aresta();
 
-        //Métodos de get
-        int getPeso();
-        int getIdNoOrigem();
-        int getIdNoDestino(); 
-        Aresta *getProxAresta(); 
+    explicit Aresta(No* no1, No* no2);
+    explicit Aresta(No* no1, No* no2, int peso);
 
-        //Outros metodos
+    No* no1;
+    No* no2;
+    int peso;
+
 
 };
 
-
-
-#endif
+#endif // ARESTA_H_INCLUDED

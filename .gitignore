@@ -139,3 +139,5 @@ nbdist/
 *.json
 *.sqlite
 *.wsuo
+/CMakeFiles/3.26.4-msvc4
+/.vs/TrabalhoGrafosGP23/config/applicationhost.config
